@@ -9,6 +9,7 @@ import cucumber.api.java.en.When;
 //import cucumber.api.DataTable;
 import io.cucumber.datatable.DataTable;
 //import gherkin.ast.DataTable;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,19 +35,14 @@ public class ContactUs {
 
     @After()
     public void tearDown() {
-        //this.driver.manage().deleteAllCookies();
-        //this.driver.close();
-        //this.driver.quit();
+        this.driver.manage().deleteAllCookies();
+        this.driver.quit();
     }
 
     @Given("I access webdriveruniversity contact us form")
     public void iAccessWebdriveruniversityContactUsForm() {
         this.driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         driver.get("http://www.webdriveruniversity.com/Contact-Us/contactus.html");
-        /*WebDriverWait wait = new WebDriverWait(driver, 20);
-        WebElement buttonClicable;
-        buttonClicable = wait.until(ExpectedConditions.elementToBeClickable(By.xpath()));
-        buttonClicable.click();*/
     }
 
     @When("I enter a valid first name")
@@ -56,7 +52,6 @@ public class ContactUs {
 
     @When("^I enter a valid last name$")
     public void iEnterAValidLastName(DataTable dataTable) {
-        //List<List<String>> data = dataTable.raw();
         List<List<String>> data = dataTable.asLists(String.class);
 
         driver.findElement(By.xpath("//*[@name='last_name']")).sendKeys(data.get(0).get(1));
@@ -67,20 +62,26 @@ public class ContactUs {
         driver.findElement(By.xpath("//*[@name='email']")).sendKeys("webdriveruniversity@outlook.com");
     }
 
-    @And("I enter comments{int}")
+    @And("I enter comments2")
     public void iEnterComments(DataTable dataTable) {
         List<List<String>> data = dataTable.asLists(String.class);
 
         driver.findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(0));
-        //driver.findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(1));
+        driver.findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(1));
     }
 
-    @When("I click on the submit button{int}")
-    public void iClickOnTheSubmitButton(int arg0) {
-
+    @When("I click on the submit button2")
+    public void iClickOnTheSubmitButton() {
+        driver.findElement(By.xpath("//*[@type='submit']")).click();
     }
 
-    @Then("the information should successfully be submitted via the contact us form{int}")
-    public void theInformationShouldSuccessfullyBeSubmittedViaTheContactUsForm(int arg0) {
+    @Then("the information should successfully be submitted via the contact us form2")
+    public void theInformationShouldSuccessfullyBeSubmittedViaTheContactUsForm() {
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        WebElement messageVisible;
+        messageVisible = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='Thank You for your Message!']")));
+
+        WebElement messageText = driver.findElement(By.xpath("//*[@id=\"contact_reply\"]/h1"));
+        Assert.assertEquals("Thank You for your Message!", messageText.getText());
     }
 }
