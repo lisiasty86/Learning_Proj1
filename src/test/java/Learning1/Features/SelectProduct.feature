@@ -8,5 +8,5 @@ Feature: Products
     Then user should be presented with a promo alert
 
     Examples:
-      |                        url                                           |          button                                   |
-      |  http://www.webdriveruniversity.com/Page-Object-Model/products.html  | #special-offers |
+      |                        url                                           |          button                        |
+      |  http://www.webdriveruniversity.com/Page-Object-Model/products.html  | //*[contains(@id,'container-special')] |

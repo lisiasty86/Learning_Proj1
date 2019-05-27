@@ -1,5 +1,6 @@
 package Learning1.Steps;
 
+import Learning1.utils.DriverFactory;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -22,8 +23,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ContactUs {
-    WebDriver driver;
+public class ContactUs extends DriverFactory {
+    /*WebDriver driver;
 
     @Before()
     public void setup() throws IOException {
@@ -37,51 +38,51 @@ public class ContactUs {
     public void tearDown() {
         this.driver.manage().deleteAllCookies();
         this.driver.quit();
-    }
+    }*/
 
     @Given("I access webdriveruniversity contact us form")
     public void iAccessWebdriveruniversityContactUsForm() {
-        this.driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
-        driver.get("http://www.webdriveruniversity.com/Contact-Us/contactus.html");
+        this.getDriver().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+        getDriver().get("http://www.webdriveruniversity.com/Contact-Us/contactus.html");
     }
 
     @When("I enter a valid first name")
     public void iEnterAValidFirstName() {
-        driver.findElement(By.xpath("//*[@name='first_name']")).sendKeys("Tom");
+        getDriver().findElement(By.xpath("//*[@name='first_name']")).sendKeys("Tom");
     }
 
     @When("^I enter a valid last name$")
     public void iEnterAValidLastName(DataTable dataTable) {
         List<List<String>> data = dataTable.asLists(String.class);
 
-        driver.findElement(By.xpath("//*[@name='last_name']")).sendKeys(data.get(0).get(1));
+        getDriver().findElement(By.xpath("//*[@name='last_name']")).sendKeys(data.get(0).get(1));
     }
 
     @And("I enter a valid email address")
     public void iEnterAValidEmailAddress() {
-        driver.findElement(By.xpath("//*[@name='email']")).sendKeys("webdriveruniversity@outlook.com");
+        getDriver().findElement(By.xpath("//*[@name='email']")).sendKeys("webdriveruniversity@outlook.com");
     }
 
     @And("I enter comments2")
     public void iEnterComments(DataTable dataTable) {
         List<List<String>> data = dataTable.asLists(String.class);
 
-        driver.findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(0));
-        driver.findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(1));
+        getDriver().findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(0));
+        getDriver().findElement(By.xpath("//*[@name='message']")).sendKeys(data.get(0).get(1));
     }
 
     @When("I click on the submit button2")
     public void iClickOnTheSubmitButton() {
-        driver.findElement(By.xpath("//*[@type='submit']")).click();
+        getDriver().findElement(By.xpath("//*[@type='submit']")).click();
     }
 
     @Then("the information should successfully be submitted via the contact us form2")
     public void theInformationShouldSuccessfullyBeSubmittedViaTheContactUsForm() {
-        WebDriverWait wait = new WebDriverWait(driver, 20);
+        WebDriverWait wait = new WebDriverWait(getDriver(), 20);
         WebElement messageVisible;
         messageVisible = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='Thank You for your Message!']")));
 
-        WebElement messageText = driver.findElement(By.xpath("//*[@id=\"contact_reply\"]/h1"));
+        WebElement messageText = getDriver().findElement(By.xpath("//*[@id=\"contact_reply\"]/h1"));
         Assert.assertEquals("Thank You for your Message!", messageText.getText());
     }
 }
